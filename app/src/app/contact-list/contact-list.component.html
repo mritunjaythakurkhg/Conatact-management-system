@@ -1,0 +1,125 @@
+
+@if(contacts.length> 0){
+  <div class="container mx-auto p-6 flex flex-col min-h-screen">
+    <div class="grid grid-cols-3 items-center mb-6">
+      <div class="col-span-1">
+        <input
+          type="text"
+          placeholder="Search by Name or Phone"
+          [(ngModel)]="searchQuery"
+          (input)="searchContacts()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#663399] focus:outline-none"
+        />
+      </div>
+      <div class="text-center text-3xl font-bold text-[#663399]">
+        Contact List
+      </div>
+      <div class="text-right">
+        <button
+          class="px-4 py-2 bg-[#663399] text-white cursor-pointer text-xs font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-all duration-300"
+          (click)="addContact()"
+        >
+          + Add Contact
+        </button>
+      </div>
+    </div>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 mb-6"
+    >
+      @for(contact of paginatedContacts; track $index){
+      <mat-card
+        class="flex flex-col p-6 bg-white rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out"
+        style="border: 1px solid #f0f0f0; background-color: #fff"
+      >
+        <div class="flex flex-col justify-between flex-grow mb-6">
+          <h3 class="text-2xl font-semibold text-[#663399] mb-2">
+            {{ contact.name }}
+          </h3>
+          <p class="text-sm text-gray-600 opacity-90 mb-2">{{ contact.email }}</p>
+          <div class="text-sm text-gray-700 opacity-80">{{ contact.phone }}</div>
+        </div>
+        <div class="flex justify-between space-x-6 mt-4">
+          <button
+            mat-icon-button
+            (click)="editContact(contact)"
+            class="text-[#663399] cursor-pointer"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="deleteContact($index)"
+            class="text-red-500 cursor-pointer"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+      }
+    </div>
+  
+    <!-- Pagination -->
+     @if(paginatedContacts.length > 0){
+      <div class="mt-auto flex justify-end space-x-4 items-center">
+        <div class="text-sm text-gray-600 mr-4">
+          Page {{ currentPage + 1 }} of {{ totalPages }} | Showing
+          {{ currentPage * pageSize + 1 }} to
+          {{ getMin((currentPage + 1) * pageSize, contacts.length) }} of
+          {{ contacts.length }} items
+        </div>
+    
+        <div class="flex space-x-2">
+          @if(currentPage > 2){
+          <button
+            (click)="goToPage(0)"
+            class="w-8 h-8 rounded-full text-white bg-[#663399] hover:bg-purple-700 transition-all duration-200 flex items-center justify-center cursor-pointer"
+          >
+            1
+          </button>
+          <span class="flex items-center justify-center text-gray-500">...</span>
+          } 
+
+          @for(page of getDisplayedPages(); track $index){
+          <button
+            (click)="goToPage(page)"
+            [class.bg-[#663399]]="currentPage === page"
+            [class.bg-gray-300]="currentPage !== page"
+            class="w-8 h-8 rounded-full text-white hover:bg-[#663399] transition-all duration-200 flex items-center justify-center cursor-pointer"
+          >
+            {{ page + 1 }}
+          </button>
+          } 
+          @if(currentPage < totalPages - 3){
+          <span class="flex items-center justify-center text-gray-500">...</span>
+          } 
+          @if(currentPage < totalPages - 3){
+          <button
+            (click)="goToPage(totalPages - 1)"
+            class="w-8 h-8 rounded-full text-white bg-[#663399] hover:bg-purple-700 transition-all duration-200 flex items-center justify-center cursor-pointer"
+          >
+            {{ totalPages }}
+          </button>
+          }
+        </div>
+      </div>
+     }
+     @else {
+      <div class="flex flex-col items-center justify-center min-h-[200px] text-center">
+        <p class="text-lg font-semibold text-gray-700">No contacts found for "{{ searchQuery }}".</p>
+      </div>
+     }
+    
+  </div>
+}
+@else {
+  <div class="flex flex-col items-center justify-center min-h-[300px] text-center">
+    <p class="text-lg font-semibold text-gray-700">No contacts available. Please add a contact.</p>
+    <button
+      class="mt-4 px-4 py-2 bg-[#663399] text-white rounded-lg shadow-md hover:bg-purple-700 transition-all duration-300"
+      (click)="addContact()"
+    >
+      + Add Contact
+    </button>
+  </div>
+}
+

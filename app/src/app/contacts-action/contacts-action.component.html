@@ -1,0 +1,85 @@
+<div
+  class="flex flex-col items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8"
+>
+  <div class="text-center mb-6">
+    <h1 class="text-4xl font-extrabold text-violet-800">
+      Contact Management System
+    </h1>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mt-2">
+      Manage your contacts effortlessly with ease.
+    </p>
+  </div>
+
+  <div class="w-full max-w-lg mx-auto bg-white shadow-2xl rounded-2xl p-8">
+    <form [formGroup]="contactForm" class="space-y-6">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-sm">Name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="name"
+          placeholder="Enter your name"
+        />
+        @if(contactForm.get('name')?.hasError('required')){
+        <mat-error class="text-right text-xs">
+          Please enter your name.
+        </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-sm">Phone</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="phone"
+          placeholder="Enter your phone number"
+        />
+        @if(contactForm.get('phone')?.hasError('required')){
+        <mat-error class="text-right text-xs">
+          Please Enter a Phone number.
+        </mat-error>
+        }
+        @if(contactForm.get('phone')?.hasError('pattern')){
+          <mat-error class="text-right text-xs">
+            Enter a valid 10-digit phone number.
+          </mat-error>
+          }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="text-sm">Email</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+        @if(contactForm.get('email')?.hasError('required')){
+        <mat-error class="text-right text-xs">
+          Enter a email address.
+        </mat-error>
+        }
+        @if(contactForm.get('email')?.hasError('email')){
+          <mat-error class="text-right text-xs">
+            Enter a valid email address.
+          </mat-error>
+          }
+      </mat-form-field>
+
+      <button
+        class="w-full bg-violet-700 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-violet-900 hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        [disabled]="contactForm.invalid"
+        (click)="onSubmit()"
+      >
+      {{ isEditMode ? 'Update' : 'Submit' }}
+      </button>
+      <button
+        class="w-full bg-violet-700 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-violet-900 hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        [routerLink]="'/'"
+      >
+        Go to List
+      </button>
+    </form>
+  </div>
+</div>
